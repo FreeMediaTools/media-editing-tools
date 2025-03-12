@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Video & Audio Tools</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    .container { max-width: 600px; margin: auto; }
+    button { margin: 10px; padding: 10px; cursor: pointer; }
+  </style>
 </head>
 <body>
+
   <header>
     <h1>Free Video & Audio Tools</h1>
     <p>Your one-stop solution for video and audio editing tools.</p>
@@ -16,109 +22,91 @@
     <div class="tool">
       <h2>AI Subtitles Generator</h2>
       <p>Add subtitles to your videos automatically.</p>
-      <button onclick="window.location.href='https://example.com/subtitles-generator'">Try it Now</button>
+      <input type="file" id="audioInput" accept="audio/*">
+      <button onclick="generateSubtitles()">Generate Subtitles</button>
+      <p id="subtitles"></p>
     </div>
-    
+
     <div class="tool">
       <h2>Video Cutter & Trimmer</h2>
       <p>Edit and trim your videos online for free.</p>
-      <button onclick="window.location.href='https://example.com/video-cutter'">Try it Now</button>
+      <input type="file" id="videoInput" accept="video/*">
+      <video id="video" controls width="300"></video><br>
+      <label>Start Time (seconds):</label> <input type="number" id="startTime" min="0">
+      <label>End Time (seconds):</label> <input type="number" id="endTime" min="0">
+      <button onclick="trimVideo()">Trim Video</button>
     </div>
-    
+
     <div class="tool">
       <h2>Text-to-Speech Reader</h2>
       <p>Convert text into natural-sounding speech.</p>
-      <button onclick="window.location.href='https://example.com/text-to-speech'">Try it Now</button>
+      <textarea id="textInput" rows="4" cols="50" placeholder="Enter text..."></textarea><br>
+      <button onclick="speakText()">Read Aloud</button>
     </div>
-    
+
     <div class="tool">
       <h2>Noise Remover</h2>
       <p>Remove background noise from your recordings.</p>
-      <button onclick="window.location.href='https://example.com/noise-remover'">Try it Now</button>
+      <input type="file" id="audioNoiseInput" accept="audio/*">
+      <button onclick="removeNoise()">Remove Noise</button>
     </div>
   </section>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Tools - Subtitles, Trimming, TTS, Noise Removal</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .container { max-width: 600px; margin: auto; }
-        button { margin: 10px; padding: 10px; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <h1>AI Tools for Video & Audio</h1>
-    <div class="container">
-        
-        <!-- Text-to-Speech Reader -->
-        <h2>Text-to-Speech Reader</h2>
-        <textarea id="textInput" rows="4" cols="50" placeholder="Enter text..."></textarea><br>
-        <button onclick="speakText()">Read Aloud</button>
-        
-        <!-- AI Subtitles Generator (Speech-to-Text) -->
-        <h2>AI Subtitles Generator</h2>
-        <input type="file" id="audioInput" accept="audio/*">
-        <button onclick="generateSubtitles()">Generate Subtitles</button>
-        <p id="subtitles"></p>
-        
-        <!-- Video Cutter & Trimmer -->
-        <h2>Video Cutter & Trimmer</h2>
-        <input type="file" id="videoInput" accept="video/*">
-        <video id="video" controls width="300"></video><br>
-        <label>Start Time (seconds):</label> <input type="number" id="startTime" min="0">
-        <label>End Time (seconds):</label> <input type="number" id="endTime" min="0">
-        <button onclick="trimVideo()">Trim Video</button>
-        
-        <!-- Noise Remover (Basic) -->
-        <h2>Noise Remover</h2>
-        <input type="file" id="audioNoiseInput" accept="audio/*">
-        <button onclick="removeNoise()">Remove Noise</button>
-    </div>
-    
-    <script>
-        // Text-to-Speech
-        function speakText() {
-            let text = document.getElementById('textInput').value;
-            let speech = new SpeechSynthesisUtterance(text);
-            window.speechSynthesis.speak(speech);
-        }
-
-        // AI Subtitles Generator (Basic Speech-to-Text)
-        function generateSubtitles() {
-            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'en-US';
-            recognition.start();
-            recognition.onresult = function(event) {
-                document.getElementById('subtitles').innerText = event.results[0][0].transcript;
-            };
-        }
-
-        // Video Cutter & Trimmer
-        function trimVideo() {
-            let video = document.getElementById('video');
-            let startTime = parseFloat(document.getElementById('startTime').value);
-            let endTime = parseFloat(document.getElementById('endTime').value);
-            video.currentTime = startTime;
-            video.ontimeupdate = function() {
-                if (video.currentTime >= endTime) {
-                    video.pause();
-                }
-            };
-        }
-
-        // Noise Remover (Basic, just a placeholder for now)
-        function removeNoise() {
-            alert("Noise removal coming soon!");
-        }
-    </script>
-</body>
-</html>
 
   <footer>
     <p>&copy; 2025 Free Video & Audio Tools</p>
   </footer>
+
+  <script>
+    // Text-to-Speech Function
+    function speakText() {
+      let text = document.getElementById("textInput").value;
+      let speech = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.speak(speech);
+    }
+
+    // AI Subtitles Generator (Placeholder)
+    function generateSubtitles() {
+      let file = document.getElementById("audioInput").files[0];
+      if (file) {
+        document.getElementById("subtitles").innerText = "Subtitles will be generated here (feature in development).";
+      } else {
+        alert("Please upload an audio file.");
+      }
+    }
+
+    // Video Trimming (Basic Simulation)
+    function trimVideo() {
+      let video = document.getElementById("video");
+      let startTime = parseFloat(document.getElementById("startTime").value);
+      let endTime = parseFloat(document.getElementById("endTime").value);
+      
+      let file = document.getElementById("videoInput").files[0];
+      if (file) {
+        let url = URL.createObjectURL(file);
+        video.src = url;
+        video.currentTime = startTime;
+
+        video.addEventListener("timeupdate", function () {
+          if (video.currentTime >= endTime) {
+            video.pause();
+          }
+        });
+      } else {
+        alert("Please upload a video file.");
+      }
+    }
+
+    // Noise Removal (Placeholder)
+    function removeNoise() {
+      let file = document.getElementById("audioNoiseInput").files[0];
+      if (file) {
+        alert("Noise removal feature is under development.");
+      } else {
+        alert("Please upload an audio file.");
+      }
+    }
+  </script>
+
 </body>
 </html>
+
