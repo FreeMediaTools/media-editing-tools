@@ -1,1 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools - Subtitles, Trimming, TTS, Noise Removal</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { max-width: 600px; margin: auto; }
+        button { margin: 10px; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>AI Tools for Video & Audio</h1>
+    <div class="container">
+        
+        <!-- Text-to-Speech Reader -->
+        <h2>Text-to-Speech Reader</h2>
+        <textarea id="textInput" rows="4" cols="50" placeholder="Enter text..."></textarea><br>
+        <button onclick="speakText()">Read Aloud</button>
+        
+        <!-- AI Subtitles Generator (Speech-to-Text) -->
+        <h2>AI Subtitles Generator</h2>
+        <input type="file" id="audioInput" accept="audio/*">
+        <button onclick="generateSubtitles()">Generate Subtitles</button>
+        <p id="subtitles"></p>
+        
+        <!-- Video Cutter & Trimmer -->
+        <h2>Video Cutter & Trimmer</h2>
+        <input type="file" id="videoInput" accept="video/*">
+        <video id="video" controls width="300"></video><br>
+        <label>Start Time (seconds):</label> <input type="number" id="startTime" min="0">
+        <label>End Time (seconds):</label> <input type="number" id="endTime" min="0">
+        <button onclick="trimVideo()">Trim Video</button>
+        
+        <!-- Noise Remover (Basic) -->
+        <h2>Noise Remover</h2>
+        <input type="file" id="audioNoiseInput" accept="audio/*">
+        <button onclick="removeNoise()">Remove Noise</button>
+    </div>
+    
+    <script>
+        // Text-to-Speech
+        function speakText() {
+            let text = document.getElementById('textInput').value;
+            let speech = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(speech);
+        }
+
+        // AI Subtitles Generator (Basic Speech-to-Text)
+        function generateSubtitles() {
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.start();
+            recognition.onresult = function(event) {
+                document.getElementById('subtitles').innerText = event.results[0][0].transcript;
+            };
+        }
+
+        // Video Cutter & Trimmer
+        function trimVideo() {
+            let video = document.getElementById('video');
+            let startTime = parseFloat(document.getElementById('startTime').value);
+            let endTime = parseFloat(document.getElementById('endTime').value);
+            video.currentTime = startTime;
+            video.ontimeupdate = function() {
+                if (video.currentTime >= endTime) {
+                    video.pause();
+                }
+            };
+        }
+
+        // Noise Remover (Basic, just a placeholder for now)
+        function removeNoise() {
+            alert("Noise removal coming soon!");
+        }
+    </script>
+</body>
+</html>
 
